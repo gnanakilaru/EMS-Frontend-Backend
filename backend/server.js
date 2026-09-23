@@ -62,12 +62,8 @@ app.get("/api/employees", async (req, res, next) => {
         : "id";
 
     const safeOrder = order === "desc" ? "desc" : "asc";
-
-
     try {
-
         let employeeQuery = db.orm.public.Employee;
-
 
         // ===============================
         // SEARCH BY NAME OR EMAIL
@@ -81,7 +77,6 @@ app.get("/api/employees", async (req, res, next) => {
                 )
             );
         }
-
 
         // ===============================
         // DEPARTMENT FILTER
@@ -102,7 +97,6 @@ app.get("/api/employees", async (req, res, next) => {
                 departmentId: id
             });
         }
-
 
         // ===============================
         // SORTING
@@ -165,7 +159,6 @@ app.get("/api/employees", async (req, res, next) => {
             );
         }
 
-
         // ===============================
         // PAGINATION
         // ===============================
@@ -175,13 +168,11 @@ app.get("/api/employees", async (req, res, next) => {
             .offset(offset)
             .all();
 
-
         // ===============================
         // COUNT
         // ===============================
 
         let countQuery = db.orm.public.Employee;
-
 
         if (search) {
             countQuery = countQuery.where((e) =>
@@ -192,7 +183,6 @@ app.get("/api/employees", async (req, res, next) => {
             );
         }
 
-
         if (departmentId) {
 
             countQuery = countQuery.where({
@@ -200,15 +190,12 @@ app.get("/api/employees", async (req, res, next) => {
             });
         }
 
-
         const result = await countQuery.aggregate((agg) => ({
             total: agg.count()
         }));
 
-
         const total = result.total;
         const totalPages = Math.ceil(total / limit);
-
 
         res.status(200).json({
             success: true,
@@ -231,7 +218,6 @@ app.get("/api/employees", async (req, res, next) => {
         next(error);
     }
 });
-
 
 // ===============================
 // GET EMPLOYEE BY ID
@@ -270,7 +256,6 @@ app.get("/api/employees/:id", async (req, res, next) => {
     }
 });
 
-
 // ===============================
 // UPDATE EMPLOYEE
 // ===============================
@@ -289,7 +274,6 @@ app.put(
             });
         }
 
-
         try {
 
             const employee =
@@ -302,28 +286,17 @@ app.put(
                 });
             }
 
-
             const updatedEmployee =
                 await db.orm.public.Employee
                     .where({ id })
                     .update({
-
                         name: req.body.name,
-
                         email: req.body.email,
-
                         phone: req.body.phone,
-
-                        departmentId:
-                            Number(req.body.departmentId),
-
-                        designation:
-                            req.body.designation,
-
-                        salary:
-                            Number(req.body.salary)
+                        departmentId:Number(req.body.departmentId),
+                        designation:req.body.designation,
+                        salary:Number(req.body.salary)
                     });
-
 
             res.status(200).json({
                 success: true,
@@ -345,7 +318,6 @@ app.put(
     }
 );
 
-
 // ===============================
 // CREATE EMPLOYEE
 // ===============================
@@ -359,21 +331,12 @@ app.post(
 
             const employee =
                 await db.orm.public.Employee.create({
-
                     name: req.body.name,
-
                     email: req.body.email,
-
                     phone: req.body.phone,
-
-                    departmentId:
-                        Number(req.body.departmentId),
-
-                    designation:
-                        req.body.designation,
-
-                    salary:
-                        Number(req.body.salary)
+                    departmentId:Number(req.body.departmentId),
+                    designation:req.body.designation,
+                    salary:Number(req.body.salary)
                 });
 
 
@@ -397,7 +360,6 @@ app.post(
     }
 );
 
-
 // ===============================
 // DELETE EMPLOYEE
 // ===============================
@@ -413,12 +375,10 @@ app.delete("/api/employees/:id", async (req, res, next) => {
         });
     }
 
-
     try {
 
         const employee =
             await db.orm.public.Employee.first({ id });
-
 
         if (!employee) {
             return res.status(404).json({
@@ -427,11 +387,9 @@ app.delete("/api/employees/:id", async (req, res, next) => {
             });
         }
 
-
         await db.orm.public.Employee
             .where({ id })
             .delete();
-
 
         return res.status(200).json({
             success: true,
@@ -464,7 +422,6 @@ app.get("/api/departments", async (req, res, next) => {
 // ===============================
 
 app.use(errorHandler);
-
 
 // ===============================
 // SERVER
